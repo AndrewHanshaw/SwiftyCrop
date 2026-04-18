@@ -60,7 +60,7 @@ struct CropView: View {
 
   @available(iOS 26, visionOS 26.0, macOS 26.0, *)
   private func buildLiquidGlassBody(configuration: SwiftyCropConfiguration) -> some View {
-    NavigationStack {
+    NavigationView {
       ZStack {
         configuration.colors.background.ignoresSafeArea()
         cropImageView
