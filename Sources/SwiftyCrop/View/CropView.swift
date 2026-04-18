@@ -61,12 +61,17 @@ struct CropView: View {
   @available(iOS 26, visionOS 26.0, macOS 26.0, *)
   private func buildLiquidGlassBody(configuration: SwiftyCropConfiguration) -> some View {
     NavigationView {
-      ZStack {
-        cropImageView
-        if isCropping {
-          ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+      ScrollView { // Dummy scroll view, necessary to trigger the blur effect behind the toolbar
+        ZStack {
+          cropImageView
+          if isCropping {
+            ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+          }
         }
       }
+      .modifier(ScrollOffsetToolbarTriggerModifier()) // Force a scroll offset to trigger the scroll edge effect on appearance
+      .scrollDisabled(true) // Don't actually want to scroll the view, just need this for the soft scroll edge effect
+      .scrollEdgeEffectStyle(.soft, for: .top)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
@@ -470,6 +475,18 @@ struct CropView: View {
         }
       }
     }
+  }
+}
+
+// MARK: - Scroll offset toolbar trigger (needed to activate scroll edge blur behind toolbar)
+
+@available(iOS 26, visionOS 26.0, macOS 26.0, *)
+private struct ScrollOffsetToolbarTriggerModifier: ViewModifier {
+  @State private var scrollPosition = ScrollPosition(y: 20)
+
+  func body(content: Content) -> some View {
+    content
+      .scrollPosition($scrollPosition)
   }
 }
 
