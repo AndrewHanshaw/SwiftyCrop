@@ -123,6 +123,15 @@ struct CropView: View {
               }
             }
           }
+        } else {
+          ToolbarItem(placement: .principal) {
+            Text(
+              configuration.texts.interactionInstructions ??
+                NSLocalizedString("interaction_instructions", tableName: localizableTableName, bundle: .module, comment: "")
+            )
+            .font(configuration.fonts.interactionInstructions)
+            .foregroundStyle(configuration.colors.interactionInstructions)
+          }
         }
 
         ToolbarItem(placement: .confirmationAction) {
