@@ -151,9 +151,9 @@ struct CropView: View {
               .fontWeight(.semibold)
           }
           .disabled(isCropping)
+          .buttonStyle(GlassProminentButtonStyle())
         }
       }
-      .navigationBarBackground(configuration.colors.background)
     }
   }
   
