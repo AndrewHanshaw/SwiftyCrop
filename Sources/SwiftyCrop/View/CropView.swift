@@ -83,6 +83,7 @@ struct CropView: View {
               .fontWeight(.semibold)
           }
         }
+
         if configuration.rotateImageWithButtons {
           ToolbarItem(placement: .principal) {
             HStack(spacing: 8) {
@@ -123,6 +124,7 @@ struct CropView: View {
             }
           }
         }
+
         ToolbarItem(placement: .confirmationAction) {
           Button {
             Task {
