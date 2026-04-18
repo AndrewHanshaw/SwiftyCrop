@@ -62,13 +62,11 @@ struct CropView: View {
   private func buildLiquidGlassBody(configuration: SwiftyCropConfiguration) -> some View {
     NavigationView {
       ZStack {
-        configuration.colors.background.ignoresSafeArea()
         cropImageView
         if isCropping {
           ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
         }
       }
-      .navigationBarDisplayModeInline()
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button {
