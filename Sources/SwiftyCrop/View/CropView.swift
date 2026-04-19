@@ -8,6 +8,7 @@ struct CropView: View {
   @StateObject private var viewModel: CropViewModel
 
   @State private var isCropping: Bool = false
+  @State private var showRotatePopover: Bool = false
   @State private var containerSize: CGSize = .zero
   @State private var activeDragStart: CGPoint? = nil
   @State private var activeHandleEdge: HandleEdge = .none
@@ -182,49 +183,62 @@ struct CropView: View {
           }
           .disabled(isCropping)
         }
-        ToolbarItem(placement: .principal) {
-          if configuration.rotateImageWithButtons {
-            HStack(spacing: 8) {
-              Button {
-                withAnimation {
-                  viewModel.angle.degrees -= 90
-                  viewModel.lastAngle = viewModel.angle
-                }
-              } label: {
-                Image(systemName: "rotate.left")
-                  .foregroundStyle(configuration.colors.rotateButton)
-              }
-              Button {
-                let numberOfFullCircles = Int(viewModel.angle.degrees / 360)
-                let newValue = Double(numberOfFullCircles * 360)
-                withAnimation {
-                  viewModel.angle = Angle(degrees: newValue)
-                  viewModel.lastAngle = viewModel.angle
-                }
-              } label: {
-                Image(systemName: "arrow.uturn.backward.circle")
-                  .foregroundStyle(configuration.colors.resetRotationButton)
-              }
-              .opacity(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0 ? 0.3 : 1)
-              .disabled(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0)
-              Button {
-                withAnimation {
-                  viewModel.angle.degrees += 90
-                  viewModel.lastAngle = viewModel.angle
-                }
-              } label: {
-                Image(systemName: "rotate.right")
-                  .foregroundStyle(configuration.colors.rotateButton)
-              }
+        if configuration.rotateImageWithButtons {
+          ToolbarItem(placement: .automatic) {
+            Button {
+              showRotatePopover = true
+            } label: {
+              Image(systemName: "ellipsis.circle")
+                .foregroundStyle(configuration.colors.rotateButton)
             }
-          } else {
-            Text(
-              configuration.texts.interactionInstructions ??
-                NSLocalizedString("interaction_instructions", tableName: localizableTableName, bundle: .module, comment: "")
-            )
-            .font(configuration.fonts.interactionInstructions)
-            .foregroundStyle(configuration.colors.interactionInstructions)
+            .popover(isPresented: $showRotatePopover) {
+              HStack(spacing: 20) {
+                Button {
+                  withAnimation {
+                    viewModel.angle.degrees -= 90
+                    viewModel.lastAngle = viewModel.angle
+                  }
+                } label: {
+                  Image(systemName: "rotate.left")
+                    .foregroundStyle(configuration.colors.rotateButton)
+                }
+
+                Button {
+                  let numberOfFullCircles = Int(viewModel.angle.degrees / 360)
+                  let newValue = Double(numberOfFullCircles * 360)
+                  withAnimation {
+                    viewModel.angle = Angle(degrees: newValue)
+                    viewModel.lastAngle = viewModel.angle
+                  }
+                } label: {
+                  Image(systemName: "arrow.uturn.backward.circle")
+                    .foregroundStyle(configuration.colors.resetRotationButton)
+                }
+                .opacity(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0 ? 0.3 : 1)
+                .disabled(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0)
+
+                Button {
+                  withAnimation {
+                    viewModel.angle.degrees += 90
+                    viewModel.lastAngle = viewModel.angle
+                  }
+                } label: {
+                  Image(systemName: "rotate.right")
+                    .foregroundStyle(configuration.colors.rotateButton)
+                }
+              }
+              .padding()
+              .popoverCompactAdaptation()
+            }
           }
+        }
+        ToolbarItem(placement: .principal) {
+          Text(
+            configuration.texts.interactionInstructions ??
+              NSLocalizedString("interaction_instructions", tableName: localizableTableName, bundle: .module, comment: "")
+          )
+          .font(configuration.fonts.interactionInstructions)
+          .foregroundStyle(configuration.colors.interactionInstructions)
         }
         ToolbarItem(placement: .confirmationAction) {
           Button {
@@ -529,6 +543,23 @@ private struct ScrollOffsetToolbarTriggerModifier: ViewModifier {
     content
       .contentMargins(.top, 20, for: .scrollContent)
       .scrollPosition($scrollPosition)
+  }
+}
+
+// MARK: - Popover compact adaptation helper
+
+private extension View {
+  @ViewBuilder
+  func popoverCompactAdaptation() -> some View {
+    #if canImport(UIKit)
+    if #available(iOS 16.4, *) {
+      self.presentationCompactAdaptation(.popover)
+    } else {
+      self
+    }
+    #else
+    self
+    #endif
   }
 }
 
