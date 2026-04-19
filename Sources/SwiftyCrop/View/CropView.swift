@@ -233,6 +233,9 @@ struct CropView: View {
               .onAppear {
                 viewModel.updateMaskDimensions(for: geometry.size)
               }
+              .onSizeChange { newSize in
+                viewModel.updateMaskDimensions(for: newSize)
+              }
           }
         )
 
@@ -252,14 +255,16 @@ struct CropView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(
       GeometryReader { geo in
-        Color.clear.onAppear { containerSize = geo.size }
+        Color.clear
+          .onAppear { containerSize = geo.size }
+          .onSizeChange { newSize in containerSize = newSize }
       }
     )
     .simultaneousGesture(magnificationGesture)
     .simultaneousGesture(dragGesture)
     .simultaneousGesture(configuration.rotateImage ? rotationGesture : nil)
   }
-  
+
   private var maskHandlesOverlay: some View {
     Group {
       ZStack {
@@ -378,6 +383,31 @@ struct CropView: View {
       }
     }
   }
+}
+
+// MARK: - Size change helper
+
+private extension View {
+  /// Calls `perform` whenever this view's size changes (including after first layout).
+  /// Uses `PreferenceKey` so it's compatible with all supported OS versions.
+  @ViewBuilder
+  func onSizeChange(_ perform: @escaping (CGSize) -> Void) -> some View {
+    if #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
+      self
+    } else {
+      background(
+        GeometryReader { geo in
+          Color.clear.preference(key: SizePreferenceKey.self, value: geo.size)
+        }
+      )
+      .onPreferenceChange(SizePreferenceKey.self, perform: perform)
+    }
+  }
+}
+
+private struct SizePreferenceKey: PreferenceKey {
+  static let defaultValue: CGSize = .zero
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) { value = nextValue() }
 }
 
 // MARK: - Platform Image View
