@@ -86,18 +86,7 @@ struct CropView: View {
         }
 
         if configuration.rotateImageWithButtons {
-          ToolbarItemGroup(placement: .automatic) {
-            Button {
-              withAnimation {
-                viewModel.angle.degrees -= 90
-                viewModel.lastAngle = viewModel.angle
-              }
-            } label: {
-              Image(systemName: "rotate.left")
-                .foregroundStyle(configuration.colors.rotateButton)
-                .fontWeight(.semibold)
-            }
-
+          ToolbarItem(placement: .automatic) {
             Button {
               let numberOfFullCircles = Int(viewModel.angle.degrees / 360)
               let newValue = Double(numberOfFullCircles * 360)
@@ -112,6 +101,21 @@ struct CropView: View {
             }
             .opacity(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0 ? 0.7 : 1)
             .disabled(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0)
+          }
+
+          ToolbarSpacer(.fixed)
+
+          ToolbarItemGroup(placement: .automatic) {
+            Button {
+              withAnimation {
+                viewModel.angle.degrees -= 90
+                viewModel.lastAngle = viewModel.angle
+              }
+            } label: {
+              Image(systemName: "rotate.left")
+                .foregroundStyle(configuration.colors.rotateButton)
+                .fontWeight(.semibold)
+            }
 
             Button {
               withAnimation {
