@@ -61,36 +61,7 @@ struct CropView: View {
   @available(iOS 26, visionOS 26.0, macOS 26.0, *)
   private func buildLiquidGlassBody(configuration: SwiftyCropConfiguration) -> some View {
     ZStack {
-      VStack {
-        ToolbarView(
-          viewModel: viewModel,
-          configuration: configuration,
-          dismiss: {
-            onCancel?()
-            dismiss()
-          }
-        ) {
-          await MainActor.run {
-            isCropping = true
-          }
-          let result = cropImage()
-          await MainActor.run {
-            onComplete(result)
-            dismiss()
-            isCropping = false
-          }
-        }
-        .padding(.top, 60)
-        .padding(.horizontal, 20)
-        .zIndex(1)
-        
-        Spacer()
-        
-        cropImageView
-        
-        Spacer()
-      }
-      .background(configuration.colors.background)
+      cropImageView
       
       if isCropping {
         ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
@@ -100,42 +71,7 @@ struct CropView: View {
   
   private func buildLegacyBody(configuration: SwiftyCropConfiguration) -> some View {
     ZStack {
-      VStack {
-        Legacy_InteractionInstructionsView(configuration: configuration, localizableTableName: localizableTableName)
-          .padding(.top, 50)
-          .zIndex(1)
-        
-        if configuration.rotateImageWithButtons {
-          Legacy_RotateButtonsView(viewModel: viewModel, configuration: configuration)
-            .zIndex(1)
-        }
-        
-        Spacer()
-        
-        cropImageView
-        
-        Spacer()
-        
-        Legacy_ButtonsView(
-          configuration: configuration,
-          localizableTableName: localizableTableName,
-          dismiss: {
-            onCancel?()
-            dismiss()
-          }
-        ) {
-          await MainActor.run {
-            isCropping = true
-          }
-          let result = cropImage()
-          await MainActor.run {
-            onComplete(result)
-            dismiss()
-            isCropping = false
-          }
-        }
-      }
-      .background(configuration.colors.background)
+      cropImageView
       
       if isCropping {
         Legacy_ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
@@ -263,6 +199,7 @@ struct CropView: View {
     .simultaneousGesture(magnificationGesture)
     .simultaneousGesture(dragGesture)
     .simultaneousGesture(configuration.rotateImage ? rotationGesture : nil)
+    .background(configuration.colors.background)
   }
 
   private var maskHandlesOverlay: some View {
