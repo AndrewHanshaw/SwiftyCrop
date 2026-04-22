@@ -5,7 +5,6 @@ struct ProgressLayer: View {
   let localizableTableName: String
   
   var body: some View {
-#if compiler(>=6.2) // Use this to prevent compiling of unavailable iOS 26 APIs
     ZStack {
       configuration.colors.background.opacity(0.4)
         .ignoresSafeArea()
@@ -37,12 +36,6 @@ struct ProgressLayer: View {
       .padding(.horizontal, 20)
     }
     .transition(.opacity)
-#else
-    VStack {
-      Text("iOS 26 is not supported. Adjust the simulator or your Xcode version.")
-    }
-    .border(.red)
-#endif
   }
 }
 
