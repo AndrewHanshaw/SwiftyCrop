@@ -46,32 +46,6 @@ struct CropView: View {
   
   // MARK: - Body
   var body: some View {
-#if compiler(>=6.2) // Use this to prevent compiling of unavailable iOS 26 / macOS 26 APIs
-    if configuration.usesLiquidGlassDesign,
-       #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
-      buildLiquidGlassBody(configuration: configuration)
-    } else {
-      buildLegacyBody(configuration: configuration)
-    }
-#else
-    buildLegacyBody(configuration: configuration)
-#endif
-  }
-
-  @available(iOS 26, visionOS 26.0, macOS 26.0, *)
-  private func buildLiquidGlassBody(configuration: SwiftyCropConfiguration) -> some View {
-    NavigationView {
-      ZStack {
-        cropImageView
-        
-        if isCropping {
-          ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
-        }
-      }
-    }
-  }
-  
-  private func buildLegacyBody(configuration: SwiftyCropConfiguration) -> some View {
     NavigationView {
       ZStack {
         cropImageView
