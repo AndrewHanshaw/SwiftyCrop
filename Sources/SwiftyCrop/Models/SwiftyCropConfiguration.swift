@@ -186,7 +186,7 @@ public struct SwiftyCropConfiguration {
     
     self.usesLiquidGlassDesign = {
       guard let usesLiquidGlassDesign else {
-        if #available(iOS 26, *) {
+        if #available(iOS 26, macOS 26, visionOS 26, *) {
           return true
         } else {
           return false

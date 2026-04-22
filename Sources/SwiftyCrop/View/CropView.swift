@@ -54,7 +54,9 @@ struct CropView: View {
         ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
       }
     }
-    .navigationContainer()
+    .toolbar {
+      toolbarView
+    }
   }
 
   // MARK: - Gestures
@@ -180,6 +182,113 @@ struct CropView: View {
     .simultaneousGesture(dragGesture)
     .simultaneousGesture(configuration.rotateImage ? rotationGesture : nil)
     .background(configuration.colors.background)
+  }
+
+  @ViewBuilder
+  private var cancelButtonLabel: some View {
+    Group {
+      if #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
+        Image(systemName: "xmark")
+      } else {
+        Text(
+          configuration.texts.cancelButton ??
+            NSLocalizedString("cancel_button", tableName: localizableTableName, bundle: .module, comment: "")
+        )
+      }
+    }
+    .font(configuration.fonts.cancelButton)
+    .foregroundStyle(configuration.colors.cancelButton)
+  }
+
+  @ViewBuilder
+  private var saveButtonLabel: some View {
+    Group {
+      if #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
+        Image(systemName: "checkmark")
+      } else {
+        Text(
+          configuration.texts.saveButton ??
+            NSLocalizedString("save_button", tableName: localizableTableName, bundle: .module, comment: "")
+        )
+      }
+    }
+    .font(configuration.fonts.saveButton)
+    .foregroundStyle(configuration.colors.saveButton)
+  }
+
+  @ToolbarContentBuilder
+  private var toolbarView: some ToolbarContent {
+    ToolbarItem(placement: .cancellationAction) {
+      Button {
+        onCancel?()
+        dismiss()
+      } label: {
+        cancelButtonLabel
+      }
+      .disabled(isCropping)
+    }
+    ToolbarItem(placement: .principal) {
+      if configuration.rotateImageWithButtons {
+        HStack(spacing: 8) {
+          Button {
+            withAnimation {
+              viewModel.angle.degrees -= 90
+              viewModel.lastAngle = viewModel.angle
+            }
+          } label: {
+            Image(systemName: "rotate.left")
+              .foregroundStyle(configuration.colors.rotateButton)
+          }
+          Button {
+            let numberOfFullCircles = Int(viewModel.angle.degrees / 360)
+            let newValue = Double(numberOfFullCircles * 360)
+            withAnimation {
+              viewModel.angle = Angle(degrees: newValue)
+              viewModel.lastAngle = viewModel.angle
+            }
+          } label: {
+            Image(systemName: "arrow.uturn.backward.circle")
+              .foregroundStyle(configuration.colors.resetRotationButton)
+          }
+          .opacity(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0 ? 0.3 : 1) // may need 0.7 opacity when disabled on iOS 26+
+          .disabled(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0)
+          Button {
+            withAnimation {
+              viewModel.angle.degrees += 90
+              viewModel.lastAngle = viewModel.angle
+            }
+          } label: {
+            Image(systemName: "rotate.right")
+              .foregroundStyle(configuration.colors.rotateButton)
+          }
+        }
+      } else {
+        Text(
+          configuration.texts.interactionInstructions ??
+            NSLocalizedString("interaction_instructions", tableName: localizableTableName, bundle: .module, comment: "")
+        )
+        .padding(.horizontal)
+        .font(configuration.fonts.interactionInstructions)
+        .foregroundStyle(configuration.colors.interactionInstructions)
+      }
+    }
+    ToolbarItem(placement: .confirmationAction) {
+      Button {
+        Task {
+          await MainActor.run { isCropping = true }
+          let result = cropImage()
+          await MainActor.run {
+            onComplete(result)
+            dismiss()
+            isCropping = false
+          }
+        }
+      } label: {
+        saveButtonLabel
+      }
+      .disabled(isCropping)
+      // may need .buttonStyle(GlassProminentButtonStyle()) on iOS 26+
+    }
   }
 
   private var maskHandlesOverlay: some View {
