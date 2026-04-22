@@ -60,21 +60,25 @@ struct CropView: View {
 
   @available(iOS 26, visionOS 26.0, macOS 26.0, *)
   private func buildLiquidGlassBody(configuration: SwiftyCropConfiguration) -> some View {
-    ZStack {
-      cropImageView
-      
-      if isCropping {
-        ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+    NavigationView {
+      ZStack {
+        cropImageView
+        
+        if isCropping {
+          ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+        }
       }
     }
   }
   
   private func buildLegacyBody(configuration: SwiftyCropConfiguration) -> some View {
-    ZStack {
-      cropImageView
-      
-      if isCropping {
-        Legacy_ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+    NavigationView {
+      ZStack {
+        cropImageView
+        
+        if isCropping {
+          Legacy_ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+        }
       }
     }
   }
