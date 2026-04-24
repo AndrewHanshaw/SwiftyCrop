@@ -1,6 +1,6 @@
 import SwiftUI
 #if canImport(UIKit)
-import PhotosUI
+  import PhotosUI
 #endif
 
 struct CropView: View {
@@ -43,30 +43,31 @@ struct CropView: View {
     )
     localizableTableName = "Localizable"
   }
-  
+
   // MARK: - Body
+
   var body: some View {
-    NavigationView {
-      ZStack {
-        cropImageView
-        
-        if isCropping {
-          Legacy_ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
-        }
+    ZStack {
+      cropImageView
+
+      if isCropping {
+        ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
       }
     }
+    .navigationContainer()
   }
-  
+
   // MARK: - Gestures
+
   private var magnificationGesture: some Gesture {
     MagnificationGesture()
       .onChanged { value in
         let sensitivity: CGFloat = 0.1 * configuration.zoomSensitivity
         let scaledValue = (value.magnitude - 1) * sensitivity + 1
-        
+
         let maxScaleValues = viewModel.calculateMagnificationGestureMaxValues()
         viewModel.scale = min(max(scaledValue * viewModel.lastScale, maxScaleValues.0), maxScaleValues.1)
-        
+
         updateOffset()
       }
       .onEnded { _ in
@@ -74,7 +75,7 @@ struct CropView: View {
         viewModel.lastOffset = viewModel.offset
       }
   }
-  
+
   private var dragGesture: some Gesture {
     DragGesture()
       .onChanged { value in
@@ -122,7 +123,7 @@ struct CropView: View {
         viewModel.lastMaskWidth = viewModel.maskSize.width
       }
   }
-  
+
   private var rotationGesture: some Gesture {
     RotationGesture()
       .onChanged { value in
@@ -132,8 +133,9 @@ struct CropView: View {
         viewModel.lastAngle = viewModel.angle
       }
   }
-  
+
   // MARK: - UI Components
+
   private var cropImageView: some View {
     ZStack {
       PlatformImageView(image: image)
@@ -263,7 +265,7 @@ struct CropView: View {
     viewModel.offset = CGSize(width: newX, height: newY)
     viewModel.lastOffset = viewModel.offset
   }
-  
+
   private func cropImage() -> PlatformImage? {
     var editedImage: PlatformImage = image
     if configuration.rotateImage || configuration.rotateImageWithButtons {
@@ -282,8 +284,9 @@ struct CropView: View {
       return viewModel.cropToSquare(editedImage)
     }
   }
-  
+
   // MARK: - Mask Shape View
+
   private struct MaskShapeView: View {
     let maskShape: MaskShape
 
@@ -301,18 +304,19 @@ struct CropView: View {
 }
 
 // MARK: - Platform Image View
+
 struct PlatformImageView: View {
   let image: PlatformImage
 
   var body: some View {
     #if canImport(UIKit)
-    Image(uiImage: image)
-      .resizable()
-      .scaledToFit()
+      Image(uiImage: image)
+        .resizable()
+        .scaledToFit()
     #elseif canImport(AppKit)
-    Image(nsImage: image)
-      .resizable()
-      .scaledToFit()
+      Image(nsImage: image)
+        .resizable()
+        .scaledToFit()
     #endif
   }
 }

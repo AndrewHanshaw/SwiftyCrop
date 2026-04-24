@@ -6,6 +6,20 @@ struct SizePreferenceKey: PreferenceKey {
 }
 
 extension View {
+<<<<<<< HEAD
+=======
+  /// Wraps the view in the appropriate navigation container for the current platform:
+  /// `NavigationStack` on macOS, `NavigationView` on iOS/iPadOS.
+  @ViewBuilder
+  func navigationContainer() -> some View {
+    #if canImport(AppKit)
+      NavigationStack { self }
+    #else
+      NavigationView { self }
+    #endif
+  }
+
+>>>>>>> 93d4d92 (Fix stuff)
   /// Calls `perform` whenever this view's size changes (including after first layout).
   /// Uses `PreferenceKey` so it's compatible with all supported OS versions.
   @ViewBuilder
