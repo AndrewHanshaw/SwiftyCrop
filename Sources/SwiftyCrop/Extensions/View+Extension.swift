@@ -9,7 +9,11 @@ extension View {
   @ViewBuilder
   func tintedGlassEffect() -> some View {
     if #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
-      self.glassEffect(.regular.tint(Color.accentColor).interactive())
+      #if os(iOS)
+        self.buttonStyle(GlassProminentButtonStyle())
+      #else
+        self.glassEffect(.regular.tint(Color.accentColor).interactive())
+      #endif
     } else {
       self
     }

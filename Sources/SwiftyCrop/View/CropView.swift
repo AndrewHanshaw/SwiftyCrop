@@ -227,50 +227,49 @@ struct CropView: View {
       }
       .disabled(isCropping)
     }
-    ToolbarItem(placement: .principal) {
-      if configuration.rotateImageWithButtons {
-        HStack(spacing: 8) {
-          Button {
-            withAnimation {
-              viewModel.angle.degrees -= 90
-              viewModel.lastAngle = viewModel.angle
-            }
-          } label: {
-            Image(systemName: "rotate.left")
-              .foregroundStyle(configuration.colors.rotateButton)
+    if configuration.rotateImageWithButtons {
+      ToolbarItemGroup(placement: .navigation) {
+        Button {
+          withAnimation {
+            viewModel.angle.degrees -= 90
+            viewModel.lastAngle = viewModel.angle
           }
-          Button {
-            let numberOfFullCircles = Int(viewModel.angle.degrees / 360)
-            let newValue = Double(numberOfFullCircles * 360)
-            withAnimation {
-              viewModel.angle = Angle(degrees: newValue)
-              viewModel.lastAngle = viewModel.angle
-            }
-          } label: {
-            Image(systemName: "arrow.uturn.backward.circle")
-              .foregroundStyle(configuration.colors.resetRotationButton)
-          }
-          .opacity(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0 ? 0.3 : 1) // may need 0.7 opacity when disabled on iOS 26+
-          .disabled(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0)
-          Button {
-            withAnimation {
-              viewModel.angle.degrees += 90
-              viewModel.lastAngle = viewModel.angle
-            }
-          } label: {
-            Image(systemName: "rotate.right")
-              .foregroundStyle(configuration.colors.rotateButton)
-          }
+        } label: {
+          Image(systemName: "rotate.left")
+            .foregroundStyle(configuration.colors.rotateButton)
         }
-      } else {
-        Text(
-          configuration.texts.interactionInstructions ??
-            NSLocalizedString("interaction_instructions", tableName: localizableTableName, bundle: .module, comment: "")
-        )
-        .padding(.horizontal)
-        .font(configuration.fonts.interactionInstructions)
-        .foregroundStyle(configuration.colors.interactionInstructions)
+        Button {
+          let numberOfFullCircles = Int(viewModel.angle.degrees / 360)
+          let newValue = Double(numberOfFullCircles * 360)
+          withAnimation {
+            viewModel.angle = Angle(degrees: newValue)
+            viewModel.lastAngle = viewModel.angle
+          }
+        } label: {
+          Image(systemName: "arrow.uturn.backward.circle")
+            .foregroundStyle(configuration.colors.resetRotationButton)
+        }
+        .opacity(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0 ? 0.3 : 1) // may need 0.7 opacity when disabled on iOS 26+
+        .disabled(viewModel.angle.degrees.truncatingRemainder(dividingBy: 360) == 0)
+        Button {
+          withAnimation {
+            viewModel.angle.degrees += 90
+            viewModel.lastAngle = viewModel.angle
+          }
+        } label: {
+          Image(systemName: "rotate.right")
+            .foregroundStyle(configuration.colors.rotateButton)
+        }
       }
+    }
+    ToolbarItem(placement: .principal) {
+      Text(
+        configuration.texts.interactionInstructions ??
+          NSLocalizedString("interaction_instructions", tableName: localizableTableName, bundle: .module, comment: "")
+      )
+      .padding(.horizontal)
+      .font(configuration.fonts.interactionInstructions)
+      .foregroundStyle(configuration.colors.interactionInstructions)
     }
     if #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
       ToolbarSpacer(.fixed)

@@ -192,6 +192,7 @@
       }
     },
     "iOS 26 is not supported. Adjust the simulator or your Xcode version." : {
+      "extractionState" : "stale",
       "localizations" : {
         "fi" : {
           "stringUnit" : {
