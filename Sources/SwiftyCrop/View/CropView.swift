@@ -47,15 +47,19 @@ struct CropView: View {
   // MARK: - Body
 
   var body: some View {
-    ZStack {
-      cropImageView
+    NavigationView {
+      ZStack {
+        cropImageView
+          .border(Color.red)
 
-      if isCropping {
-        ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+        if isCropping {
+          ProgressLayer(configuration: configuration, localizableTableName: localizableTableName)
+        }
       }
-    }
-    .toolbar {
-      toolbarView
+      .scrollOffsetToolbarTrigger()
+      .toolbar {
+        toolbarView
+      }
     }
   }
 
