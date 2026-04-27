@@ -292,7 +292,7 @@ struct CropView: View {
       .disabled(isCropping)
       // may need .buttonStyle(GlassProminentButtonStyle()) on iOS 26+
       // .buttonStyle(GlassProminentButtonStyle())
-      .glassEffect(.regular.tint(Color.accentColor).interactive())
+      .tintedGlassEffect()
     }
   }
 
