@@ -136,77 +136,77 @@ struct ContentView: View {
           }
 
           Toggle("Crop image to circle", isOn: $cropImageCircular)
-          
+
           Toggle("Rotate image (gestures)", isOn: $rotateImage)
-          
+
           Toggle("Rotate image (buttons)", isOn: $rotateImageWithButtons)
-          
+
           if #available(iOS 26, visionOS 26, macOS 26, *) {
             Toggle("Liquid Glass design", isOn: $usesLiquidGlassDesign)
           }
-          
+
           HStack {
             Text("Max magnification")
               .frame(maxWidth: .infinity, alignment: .leading)
-            
+
             DecimalTextField(value: $maxMagnificationScale)
               .focused($textFieldFocused)
           }
-          
+
           HStack {
             Text("Mask radius")
               .frame(maxWidth: .infinity, alignment: .leading)
 
             #if os(iOS)
-            Button {
-              maskRadius = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 2
-            } label: {
-              Image(systemName: "arrow.up.left.and.arrow.down.right")
-                .font(.footnote)
-            }
-            #elseif os(macOS)
-            Button {
-              if let screen = NSScreen.main {
-                maskRadius = min(screen.frame.width, screen.frame.height) / 2
-              } else {
-                maskRadius = 200
+              Button {
+                maskRadius = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 2
+              } label: {
+                Image(systemName: "arrow.up.left.and.arrow.down.right")
+                  .font(.footnote)
               }
-            } label: {
-              Image(systemName: "arrow.up.left.and.arrow.down.right")
-                .font(.footnote)
-            }
+            #elseif os(macOS)
+              Button {
+                if let screen = NSScreen.main {
+                  maskRadius = min(screen.frame.width, screen.frame.height) / 2
+                } else {
+                  maskRadius = 200
+                }
+              } label: {
+                Image(systemName: "arrow.up.left.and.arrow.down.right")
+                  .font(.footnote)
+              }
             #endif
 
             DecimalTextField(value: $maskRadius)
               .focused($textFieldFocused)
           }
-          
+
           HStack {
             Text("Zoom sensitivity")
-            
+
               .frame(maxWidth: .infinity, alignment: .leading)
-            
+
             DecimalTextField(value: $zoomSensitivity)
               .focused($textFieldFocused)
           }
         }
       }
       .toolbar {
-#if os(visionOS)
-        ToolbarItemGroup(placement: .bottomOrnament) {
-          Button("Done") {
-            textFieldFocused = false
+        #if os(visionOS)
+          ToolbarItemGroup(placement: .bottomOrnament) {
+            Button("Done") {
+              textFieldFocused = false
+            }
           }
-        }
-#else
-        ToolbarItemGroup(placement: .keyboard) {
-          Spacer()
-          
-          Button("Done") {
-            textFieldFocused = false
+        #else
+          ToolbarItemGroup(placement: .keyboard) {
+            Spacer()
+
+            Button("Done") {
+              textFieldFocused = false
+            }
           }
-        }
-#endif
+        #endif
       }
       .buttonStyle(.bordered)
       .padding()
@@ -234,6 +234,7 @@ struct ContentView: View {
           interactionInstructions: Color.primary,
           rotateButton: Color.primary,
           resetRotationButton: Color.primary,
+          background: Color.primary,
           cropHandle: Color.primary
         )
       )

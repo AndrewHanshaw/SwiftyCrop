@@ -272,6 +272,9 @@ struct CropView: View {
         .foregroundStyle(configuration.colors.interactionInstructions)
       }
     }
+    if #available(iOS 26, visionOS 26.0, macOS 26.0, *) {
+      ToolbarSpacer(.fixed)
+    }
     ToolbarItem(placement: .confirmationAction) {
       Button {
         Task {
@@ -288,6 +291,8 @@ struct CropView: View {
       }
       .disabled(isCropping)
       // may need .buttonStyle(GlassProminentButtonStyle()) on iOS 26+
+      // .buttonStyle(GlassProminentButtonStyle())
+      .glassEffect(.regular.tint(Color.accentColor).interactive())
     }
   }
 
