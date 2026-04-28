@@ -269,7 +269,10 @@ struct ContentView: View {
           rectAspectRatio: rectAspectRatio.getValue(),
           allowAspectRatioResizing: allowAspectRatioResizing,
           minAspectRatio: minAspectRatio,
-          maxAspectRatio: maxAspectRatio
+          maxAspectRatio: maxAspectRatio,
+          colors: SwiftyCropConfiguration.Colors(
+            interactionInstructions: Color.primary
+          )
         ),
         onCancel: {
           print("Operation cancelled")
