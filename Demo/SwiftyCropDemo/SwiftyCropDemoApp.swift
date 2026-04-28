@@ -28,6 +28,7 @@ struct SwiftyCropDemoApp: App {
       CropWindowView()
         .environmentObject(cropSession)
     }
+    .windowStyle(.hiddenTitleBar)
     .defaultSize(width: 620, height: 620)
     #endif
   }
