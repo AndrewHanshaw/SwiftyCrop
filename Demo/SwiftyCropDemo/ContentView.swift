@@ -281,12 +281,12 @@ struct ContentView: View {
         // Do something with the returned, cropped image
         self.selectedImage = croppedImage
       }
-      .clipped(antialiased: false)
-      #if os(macOS)
-      .frame(width: 600, height: 600)
-      #else
-      .ignoresSafeArea(edges: .all)
-      #endif
+      // .clipped(antialiased: false)
+      // #if os(macOS)
+      //   .frame(width: 600, height: 600)
+      // #else
+      //   .ignoresSafeArea(edges: .all)
+      // #endif
     }
   }
   
