@@ -246,7 +246,7 @@ struct ContentView: View {
       showImageCropper = false
     }
     #else
-    .fullScreenCover(isPresented: $showImageCropper) {
+    .sheet(isPresented: $showImageCropper) {
       imageCropperView
     }
     #endif
