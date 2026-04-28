@@ -183,7 +183,6 @@ struct CropView: View {
     .simultaneousGesture(magnificationGesture)
     .simultaneousGesture(dragGesture)
     .simultaneousGesture(configuration.rotateImage ? rotationGesture : nil)
-    .background(configuration.colors.background)
   }
 
   @ViewBuilder
