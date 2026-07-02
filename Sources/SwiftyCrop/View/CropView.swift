@@ -13,7 +13,7 @@ struct CropView: View {
   @State private var activeHandleEdge: HandleEdge? = nil
 
   private let image: PlatformImage
-  private let maskShape: MaskShape
+  @State private var maskShape: MaskShape
   private let configuration: SwiftyCropConfiguration
   private let onCancel: (() -> Void)?
   private let onComplete: (PlatformImage?) -> Void
@@ -208,6 +208,13 @@ struct CropView: View {
         configuration: configuration
       )
     }
+    if configuration.allowMaskShapeToggle {
+      MaskShapeControlsView(
+        maskShape: $maskShape,
+        configuration: configuration,
+        onSelect: { viewModel.updateMaskShape($0) }
+      )
+    }
     ToolbarItem(placement: .principal) {
       Text(
         configuration.texts.interactionInstructions ??
@@ -365,6 +372,80 @@ struct CropView: View {
         }
       }
     }
+  }
+}
+
+// MARK: - Mask Shape Controls View
+struct MaskShapeControlsView: ToolbarContent {
+  @Binding var maskShape: MaskShape
+  let configuration: SwiftyCropConfiguration
+  let onSelect: (MaskShape) -> Void
+
+  @State private var showShapePopover: Bool = false
+
+  var body: some ToolbarContent {
+    #if os(iOS) || os(visionOS)
+    ToolbarItem(placement: .navigation) {
+      if #available(iOS 16.4, visionOS 1.0, *) {
+        Button {
+          showShapePopover = true
+        } label: {
+          Image(systemName: "circle.on.square")
+            .foregroundStyle(configuration.colors.rotateButton)
+        }
+        .popover(isPresented: $showShapePopover) {
+          HStack(spacing: 12) {
+            shapeButtons(onDismiss: { showShapePopover = false })
+              .labelStyle(.iconOnly)
+          }
+          .padding()
+          .presentationCompactAdaptation(.popover)
+        }
+      } else {
+        Menu {
+          shapeButtons()
+        } label: {
+          Image(systemName: "circle.on.square")
+        }
+        .foregroundStyle(configuration.colors.rotateButton)
+      }
+    }
+    #else
+    ToolbarItemGroup(placement: .navigation) {
+      shapeButtons()
+        .labelStyle(.iconOnly)
+    }
+    #endif
+  }
+
+  @ViewBuilder
+  private func shapeButtons(onDismiss: (() -> Void)? = nil) -> some View {
+    Button {
+      maskShape = .circle
+      onSelect(.circle)
+      onDismiss?()
+    } label: {
+      Label("Circle", systemImage: "circle")
+    }
+    .foregroundStyle(configuration.colors.rotateButton)
+
+    Button {
+      maskShape = .square
+      onSelect(.square)
+      onDismiss?()
+    } label: {
+      Label("Square", systemImage: "square")
+    }
+    .foregroundStyle(configuration.colors.rotateButton)
+
+    Button {
+      maskShape = .rectangle
+      onSelect(.rectangle)
+      onDismiss?()
+    } label: {
+      Label("Rectangle", systemImage: "rectangle")
+    }
+    .foregroundStyle(configuration.colors.rotateButton)
   }
 }
 

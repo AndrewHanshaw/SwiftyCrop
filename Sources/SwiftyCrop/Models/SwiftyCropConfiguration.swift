@@ -11,6 +11,7 @@ public struct SwiftyCropConfiguration {
   public let zoomSensitivity: CGFloat
   public let rectAspectRatio: CGFloat
   public let allowAspectRatioResizing: Bool
+  public let allowMaskShapeToggle: Bool
   public let minAspectRatio: CGFloat
   public let maxAspectRatio: CGFloat
   public let texts: Texts
@@ -142,6 +143,8 @@ public struct SwiftyCropConfiguration {
   ///
   ///   - allowAspectRatioResizing: Whether grab handles are shown on rectangle masks to adjust the aspect ratio on the fly. Defaults to `false`.
   ///
+  ///   - allowMaskShapeToggle: Whether a toolbar button is shown to cycle through mask shapes (circle, square, rectangle) on the fly. Defaults to `false`.
+  ///
   ///   - minAspectRatio: The minimum allowed aspect ratio (width/height) when resizing a rectangle mask. Defaults to `0.1`.
   ///
   ///   - maxAspectRatio: The maximum allowed aspect ratio (width/height) when resizing a rectangle mask. Defaults to `10.0`.
@@ -160,6 +163,7 @@ public struct SwiftyCropConfiguration {
     zoomSensitivity: CGFloat = 1,
     rectAspectRatio: CGFloat = 4/3,
     allowAspectRatioResizing: Bool = false,
+    allowMaskShapeToggle: Bool = false,
     minAspectRatio: CGFloat = 0.1,
     maxAspectRatio: CGFloat = 10.0,
     texts: Texts = Texts(),
@@ -174,6 +178,7 @@ public struct SwiftyCropConfiguration {
     self.zoomSensitivity = zoomSensitivity
     self.rectAspectRatio = rectAspectRatio
     self.allowAspectRatioResizing = allowAspectRatioResizing
+    self.allowMaskShapeToggle = allowMaskShapeToggle
     self.minAspectRatio = minAspectRatio
     self.maxAspectRatio = maxAspectRatio
     self.texts = texts

@@ -96,6 +96,9 @@
         }
       }
     },
+    "Circle" : {
+
+    },
     "interaction_instructions" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -285,6 +288,9 @@
           }
         }
       }
+    },
+    "Rectangle" : {
+
     },
     "Reset Rotation" : {
       "extractionState" : "manual",
@@ -665,6 +671,9 @@
           }
         }
       }
+    },
+    "Square" : {
+
     }
   },
   "version" : "1.0"

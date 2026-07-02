@@ -14,7 +14,7 @@ typealias PlatformImage = NSImage
 class CropViewModel: ObservableObject {
     private let maskRadius: CGFloat
     private let maxMagnificationScale: CGFloat // The maximum allowed scale factor for image magnification.
-    private let maskShape: MaskShape // The shape of the mask used for cropping.
+    private(set) var maskShape: MaskShape // The shape of the mask used for cropping.
     var rectAspectRatio: CGFloat // The aspect ratio for rectangular masks.
     private let minAspectRatio: CGFloat // The minimum allowed aspect ratio when resizing a rectangle mask.
     private let maxAspectRatio: CGFloat // The maximum allowed aspect ratio when resizing a rectangle mask.
@@ -76,6 +76,15 @@ class CropViewModel: ObservableObject {
         updateMaskSize(for: imageSizeInView)
         lastMaskHeight = maskSize.height
         lastMaskWidth = maskSize.width
+    }
+
+    /**
+     Updates the mask shape and recalculates mask dimensions.
+     - Parameter shape: The new mask shape to apply.
+     */
+    func updateMaskShape(_ shape: MaskShape) {
+        maskShape = shape
+        updateMaskDimensions(for: imageSizeInView)
     }
 
     /**

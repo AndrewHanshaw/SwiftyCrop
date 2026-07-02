@@ -20,6 +20,7 @@ struct ContentView: View {
   @State private var maskRadius: CGFloat
   @State private var zoomSensitivity: CGFloat
   @State private var allowAspectRatioResizing: Bool
+  @State private var allowMaskShapeToggle: Bool
   @State private var minAspectRatio: CGFloat
   @State private var maxAspectRatio: CGFloat
   @FocusState private var textFieldFocused: Bool
@@ -52,6 +53,7 @@ struct ContentView: View {
     _maskRadius = State(initialValue: defaultConfiguration.maskRadius)
     _zoomSensitivity = State(initialValue: defaultConfiguration.zoomSensitivity)
     _allowAspectRatioResizing = State(initialValue: defaultConfiguration.allowAspectRatioResizing)
+    _allowMaskShapeToggle = State(initialValue: defaultConfiguration.allowMaskShapeToggle)
     _minAspectRatio = State(initialValue: defaultConfiguration.minAspectRatio)
     _maxAspectRatio = State(initialValue: defaultConfiguration.maxAspectRatio)
   }
@@ -134,6 +136,8 @@ struct ContentView: View {
           }
 
           Toggle("Crop image to circle", isOn: $cropImageCircular)
+          
+          Toggle("Change mask shape with buttons", isOn: $allowMaskShapeToggle)
           
           Toggle("Rotate image (gestures)", isOn: $rotateImage)
           
@@ -256,6 +260,7 @@ struct ContentView: View {
       zoomSensitivity: zoomSensitivity,
       rectAspectRatio: rectAspectRatio.getValue(),
       allowAspectRatioResizing: allowAspectRatioResizing,
+      allowMaskShapeToggle: allowMaskShapeToggle,
       minAspectRatio: minAspectRatio,
       maxAspectRatio: maxAspectRatio,
       colors: SwiftyCropConfiguration.Colors(
