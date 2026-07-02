@@ -381,49 +381,22 @@ struct MaskShapeControlsView: ToolbarContent {
   let configuration: SwiftyCropConfiguration
   let onSelect: (MaskShape) -> Void
 
-  @State private var showShapePopover: Bool = false
-
   var body: some ToolbarContent {
-    #if os(iOS) || os(visionOS)
     ToolbarItem(placement: .navigation) {
-      if #available(iOS 16.4, visionOS 1.0, *) {
-        Button {
-          showShapePopover = true
-        } label: {
-          Image(systemName: "circle.on.square")
+      Menu {
+        shapeButtons()
+      } label: {
+          Label("Change Crop Shape", systemImage: "circle.on.square")
             .foregroundStyle(configuration.colors.rotateButton)
-        }
-        .popover(isPresented: $showShapePopover) {
-          HStack(spacing: 12) {
-            shapeButtons(onDismiss: { showShapePopover = false })
-              .labelStyle(.iconOnly)
-          }
-          .padding()
-          .presentationCompactAdaptation(.popover)
-        }
-      } else {
-        Menu {
-          shapeButtons()
-        } label: {
-          Image(systemName: "circle.on.square")
-        }
-        .foregroundStyle(configuration.colors.rotateButton)
       }
     }
-    #else
-    ToolbarItemGroup(placement: .navigation) {
-      shapeButtons()
-        .labelStyle(.iconOnly)
-    }
-    #endif
   }
 
   @ViewBuilder
-  private func shapeButtons(onDismiss: (() -> Void)? = nil) -> some View {
+  private func shapeButtons() -> some View {
     Button {
       maskShape = .circle
       onSelect(.circle)
-      onDismiss?()
     } label: {
       Label("Circle", systemImage: "circle")
     }
@@ -432,7 +405,6 @@ struct MaskShapeControlsView: ToolbarContent {
     Button {
       maskShape = .square
       onSelect(.square)
-      onDismiss?()
     } label: {
       Label("Square", systemImage: "square")
     }
@@ -441,7 +413,6 @@ struct MaskShapeControlsView: ToolbarContent {
     Button {
       maskShape = .rectangle
       onSelect(.rectangle)
-      onDismiss?()
     } label: {
       Label("Rectangle", systemImage: "rectangle")
     }
