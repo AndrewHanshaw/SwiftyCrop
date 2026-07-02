@@ -278,26 +278,15 @@ struct ContentView: View {
   
   // Example function for downloading an image
   private func downloadExampleImage() async -> PlatformImage? {
-    let portraitUrlString = "https://loremflickr.com/1000/1200"
-    let landscapeUrlString = "https://loremflickr.com/2000/1000"
+    let portraitUrlString = "https://picsum.photos/1000/1200"
+    let landscapeUrlString = "https://picsum.photos/2000/1000"
     let urlString = Int.random(in: 0...1) == 0 ? portraitUrlString : landscapeUrlString
-    guard let url = URL(string: urlString) else { return nil }
+    guard let url = URL(string: urlString),
+          let (data, _) = try? await URLSession.shared.data(from: url),
+          let image = PlatformImage(data: data)
+    else { return nil }
 
-    do {
-      let (data, response) = try await URLSession.shared.data(from: url)
-      if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-        print("Example image download failed: HTTP \(httpResponse.statusCode) from \(urlString)")
-        return nil
-      }
-      guard let image = PlatformImage(data: data) else {
-        print("Example image download failed: response was not a decodable image from \(urlString)")
-        return nil
-      }
-      return image
-    } catch {
-      print("Example image download failed: \(error.localizedDescription)")
-      return nil
-    }
+    return image
   }
 }
 

@@ -17,9 +17,9 @@
 
 <div align="center">
 
-| Circle Mask Shape | Square Mask Shape |
-|:-----------------:|:-----------------:|
-| <img src="Assets/circle_crop.png" width="200px"/> | <img src="Assets/square_crop.png" width="200px"/> |
+| Circle Mask Shape | Square Mask Shape | Liquid Glass UI |
+|:-----------------:|:-----------------:|:---------------:|
+| <img src="Assets/crop_circle.png" width="200px"/> | <img src="Assets/crop_square.png" width="200px"/> | <img src="Assets/liquid_glass.png" width="200px"/> |
 
 </div>
 
@@ -243,15 +243,15 @@ let configuration = SwiftyCropConfiguration(
 ```
 
 <p align="center">
-    <img src="Assets/aspect_crop.png" style="margin: auto; width: 250px"/>
+    <img src="Assets/aspect_ratio_resizing.png" style="margin: auto; width: 250px"/>
 </p>
 
 ## 🪟 iOS 26 & Liquid Glass
 
-To adopt the new Liquid Glass design Apple introduced with iOS 26, SwiftyCrop renders a UI that reflects this design (the screenshots above). This replaces text buttons with icon buttons and much more. It is applied automatically whenever iOS 26, visionOS 26 or macOS 26 is available; older OS versions fall back to the classic UI shown below. There is no toggle for it.
+To adopt the new Liquid Glass design Apple introduced with iOS 26, SwiftyCrop renders a UI that reflects this design. This replaces text buttons with icon buttons and much more. It is applied automatically whenever iOS 26, visionOS 26 or macOS 26 is available; older OS versions fall back to the classic UI. There is no toggle for it. Below is the current way it looks.
 
 <p align="center">
-    <img src="Assets/legacy_square.png" style="margin: auto; width: 250px"/>
+    <img src="Assets/liquid_glass.png" style="margin: auto; width: 250px"/>
 </p>
 
 ## 👨‍💻 Contributors
