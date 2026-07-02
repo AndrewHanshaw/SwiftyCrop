@@ -105,91 +105,91 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bewegen und Skalieren"
+            "value" : "Bild Zuschneiden"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Move and Scale"
+            "value" : "Crop Image"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mover y Escalar"
+            "value" : "Recortar Imagen"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siirrä ja Skaalaa"
+            "value" : "Rajaa Kuva"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Déplacer et Dimensionner"
+            "value" : "Recadrer l'Image"
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mozgatás és Méretezés"
+            "value" : "Kép Kivágása"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Muoversi e Scalare"
+            "value" : "Ritaglia Immagine"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "移動・拡大縮小"
+            "value" : "画像をトリミング"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "움직여 조절하세요."
+            "value" : "이미지 자르기"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mover e Dimensionar"
+            "value" : "Recortar Imagem"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Перемещение и Масштабирование"
+            "value" : "Обрезать Изображение"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Taşıyın ve Ölçeklendirin"
+            "value" : "Resmi Kırp"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Переміщення та Масштабування"
+            "value" : "Обрізати Зображення"
           }
         },
         "zh" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "移动·缩放"
+            "value" : "裁剪图片"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "移動並縮放圖片來裁切"
+            "value" : "裁剪圖片"
           }
         }
       }
