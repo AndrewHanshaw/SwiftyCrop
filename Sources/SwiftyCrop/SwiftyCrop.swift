@@ -69,7 +69,7 @@ public struct SwiftyCropView: View {
                 onCancel: onCancel,
                 onComplete: onComplete
             )
-            .ignoresSafeArea(.container, edges: .top) // Centers view between the toolbar and  the bottom of the screen
+            .ignoresSafeArea(.container, edges: .all) // Centers view between the toolbar and the bottom of the screen, consistently across orientations
         }
         #else
         // On macOS the consumer provides a NavigationStack via navigationDestination;
