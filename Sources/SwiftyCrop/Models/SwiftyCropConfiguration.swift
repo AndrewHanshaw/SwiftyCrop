@@ -137,7 +137,7 @@ public struct SwiftyCropConfiguration {
   ///
   ///   - rotateImageWithButtons: Option to show rotation buttons. Defaults to `false`.
   ///
-  ///   - zoomSensitivity: Sensitivity when zooming. Default is `1.0`. Decrease to increase sensitivity.
+  ///   - zoomSensitivity: Sensitivity when zooming. Default is `1.0`, which maps a pinch gesture to a 1:1 scale change. Increase to make zoom faster/more sensitive; decrease to dampen it.
   ///
   ///   - rectAspectRatio: The aspect ratio to use when a `.rectangle` mask shape is used. Defaults to `4:3`.
   ///
