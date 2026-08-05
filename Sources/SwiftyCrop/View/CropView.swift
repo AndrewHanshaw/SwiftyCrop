@@ -63,21 +63,71 @@ struct CropView: View {
   }
   
   // MARK: - Gestures
-  private var magnificationGesture: some Gesture {
+  private var magnificationGesture: AnyGesture<Void> {
+    if #available(iOS 17.0, macOS 14.0, visionOS 1.0, *) {
+      return AnyGesture(pinchZoomGesture.map { _ in })
+    } else {
+      return AnyGesture(legacyMagnificationGesture.map { _ in })
+    }
+  }
+
+  /// Zooms centered on the point between the fingers, so the content under the pinch stays put.
+  /// Requires the anchor location exposed by `MagnifyGesture`, so it's only available on newer OS versions.
+  @available(iOS 17.0, macOS 14.0, visionOS 1.0, *)
+  private var pinchZoomGesture: some Gesture {
+    MagnifyGesture()
+      .onChanged { value in
+        let newScale = clampedScale(from: value.magnification)
+
+        // Point between the fingers, relative to the container's center.
+        let anchor = value.startAnchor
+        let focalPoint = CGPoint(
+          x: (anchor.x - 0.5) * containerSize.width,
+          y: (anchor.y - 0.5) * containerSize.height
+        )
+
+        // Frozen at gesture start so repeated onChanged calls compute from a stable baseline.
+        let oldScale = viewModel.lastScale
+        let oldOffset = viewModel.lastOffset
+        let scaleRatio = newScale / oldScale
+        let rawOffset = CGSize(
+          width: focalPoint.x - scaleRatio * (focalPoint.x - oldOffset.width),
+          height: focalPoint.y - scaleRatio * (focalPoint.y - oldOffset.height)
+        )
+
+        viewModel.scale = newScale
+
+        let maxOffsetPoint = viewModel.calculateDragGestureMax()
+        viewModel.offset = CGSize(
+          width: min(max(rawOffset.width, -maxOffsetPoint.x), maxOffsetPoint.x),
+          height: min(max(rawOffset.height, -maxOffsetPoint.y), maxOffsetPoint.y)
+        )
+      }
+      .onEnded { _ in
+        viewModel.lastScale = viewModel.scale
+        viewModel.lastOffset = viewModel.offset
+      }
+  }
+
+  /// Falls back to zooming from the mask's center, used on OS versions without pinch anchor support.
+  private var legacyMagnificationGesture: some Gesture {
     MagnificationGesture()
       .onChanged { value in
-        let sensitivity: CGFloat = configuration.zoomSensitivity
-        let scaledValue = (value.magnitude - 1) * sensitivity + 1
-        
-        let maxScaleValues = viewModel.calculateMagnificationGestureMaxValues()
-        viewModel.scale = min(max(scaledValue * viewModel.lastScale, maxScaleValues.0), maxScaleValues.1)
-        
+        viewModel.scale = clampedScale(from: value.magnitude)
         updateOffset()
       }
       .onEnded { _ in
         viewModel.lastScale = viewModel.scale
         viewModel.lastOffset = viewModel.offset
       }
+  }
+
+  /// Applies zoom sensitivity and clamps to the allowed magnification range.
+  private func clampedScale(from magnification: CGFloat) -> CGFloat {
+    let sensitivity: CGFloat = configuration.zoomSensitivity
+    let scaledValue = (magnification - 1) * sensitivity + 1
+    let maxScaleValues = viewModel.calculateMagnificationGestureMaxValues()
+    return min(max(scaledValue * viewModel.lastScale, maxScaleValues.0), maxScaleValues.1)
   }
   
   private var dragGesture: some Gesture {
